@@ -32,7 +32,8 @@ class _SalaryPaymentScreenState extends State<SalaryPaymentScreen> {
           // Başarılı bir şekilde ödeme yapıldığını ve zamlı maaş yatırılan kişi sayısını bildir
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Maaş ödemeleri başarılı! ${result['totalPayments']} kişiye ödeme yapıldı, bunlardan ${result['increasedPayments']} kişiye zamlı maaş yatırıldı.'),
+              content: Text(
+                  'Maaş ödemeleri başarılı! ${result['totalPayments']} kişiye ödeme yapıldı, bunlardan ${result['increasedPayments']} kişiye zamlı maaş yatırıldı.'),
               duration: Duration(seconds: 2),
             ),
           );
@@ -68,9 +69,7 @@ class _SalaryPaymentScreenState extends State<SalaryPaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Maaş Ödeme Ekranı'),
-      ),
+      backgroundColor: Colors.lightBlueAccent,
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -90,11 +89,11 @@ class _SalaryPaymentScreenState extends State<SalaryPaymentScreen> {
                 );
               }).toList(),
             ),
+            Text("Kimlik Numarasının Son Hanesi : "),
             TextField(
               controller: _amountController,
               decoration: InputDecoration(
-                labelText: 'Ödenecek Maaş Miktarı',
-                suffixText: 'TL',
+                labelText: 'Yatırılacak Maaş Miktarı',
               ),
               keyboardType: TextInputType.number,
             ),

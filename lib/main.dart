@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'screens/employee_registration_screen.dart';
 import 'screens/salary_payment_screen.dart';
 import 'screens/salary_slip_screen.dart';
-import 'screens/registered_employees_screen.dart';
-
-
 
 void main() {
   runApp(MyApp());
@@ -14,9 +11,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Şirket Çalışan Yönetim Sistemi',
+      debugShowCheckedModeBanner: false,
+      title: 'finalodev2',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: OpeningScreen(),
@@ -24,66 +22,48 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class OpeningScreen extends StatelessWidget {
+class OpeningScreen extends StatefulWidget {
+  @override
+  _OpeningScreenState createState() => _OpeningScreenState();
+}
+
+class _OpeningScreenState extends State<OpeningScreen>
+    with SingleTickerProviderStateMixin {
+  TabController? _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ana Menü'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EmployeeRegistrationScreen()),
-                );
-              },
-              label: Text('Çalışan Kayıt'),
-              icon: Icon(Icons.person_add),
-              heroTag: null, // Hero animasyonu için benzersiz bir tag belirtin
-            ),
-            SizedBox(height: 20),
-            FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisteredEmployeesScreen()),
-                );
-              },
-              label: Text('Kayıtlı Çalışanlar'),
-              icon: Icon(Icons.view_list),
-              heroTag: null,
-            ),
-            SizedBox(height: 20),
-            FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SalarySlipScreen()),
-                );
-              },
-              label: Text('Maaş Bordrosu'),
-              icon: Icon(Icons.list),
-              heroTag: null,
-            ),
-            SizedBox(height: 20),
-            FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SalaryPaymentScreen()),
-                );
-              },
-              label: Text('Ödeme Yap'),
-              icon: Icon(Icons.payment),
-              heroTag: null,
-            ),
+        title: Text('Maaş Uygulaması'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: [
+            Tab(icon: Icon(Icons.person_add), text: 'Çalışan Kayıt'),
+            Tab(icon: Icon(Icons.list), text: 'Maaş Bordrosu'),
+            Tab(icon: Icon(Icons.payment), text: 'Ödeme Yap'),
           ],
         ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          EmployeeRegistrationScreen(),
+          SalarySlipScreen(),
+          SalaryPaymentScreen(),
+        ],
       ),
     );
   }

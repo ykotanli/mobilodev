@@ -9,13 +9,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geocoding/geocoding.dart';
 
-
 class EmployeeRegistrationScreen extends StatefulWidget {
   @override
-  _EmployeeRegistrationScreenState createState() => _EmployeeRegistrationScreenState();
+  _EmployeeRegistrationScreenState createState() =>
+      _EmployeeRegistrationScreenState();
 }
 
-class _EmployeeRegistrationScreenState extends State<EmployeeRegistrationScreen> {
+class _EmployeeRegistrationScreenState
+    extends State<EmployeeRegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
   String _name = '';
   String _identityNumber = '';
@@ -46,12 +47,12 @@ class _EmployeeRegistrationScreenState extends State<EmployeeRegistrationScreen>
       _selectedLocation = location;
     });
     // Seçilen konumun adresini al
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        location.latitude, location.longitude);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(location.latitude, location.longitude);
     if (placemarks.isNotEmpty) {
       Placemark place = placemarks.first;
-      String formattedAddress = '${place.name}, ${place.locality}, ${place
-          .postalCode}, ${place.country}';
+      String formattedAddress =
+          '${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}';
       setState(() {
         _address = formattedAddress; // Adresi _address değişkenine ata
       });
@@ -92,14 +93,9 @@ class _EmployeeRegistrationScreenState extends State<EmployeeRegistrationScreen>
     });
   }
 
-  Future<void> _deleteAllEmployees() async {
-    await DatabaseHelper.instance.deleteAllData();
-    _loadEmployees();
-  }
-
   Future<void> _pickImage() async {
-    final pickedImage = await ImagePicker().pickImage(
-        source: ImageSource.gallery);
+    final pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       setState(() {
         _image = File(pickedImage.path);
@@ -127,37 +123,26 @@ class _EmployeeRegistrationScreenState extends State<EmployeeRegistrationScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Çalışan Kayıt Ekranı'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: _deleteAllEmployees,
-          ),
-        ],
-      ),
+      backgroundColor: Colors.green,
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
-              if (_image != null)
-                Image.file(_image!, width: 100, height: 100),
+              if (_image != null) Image.file(_image!, width: 100, height: 100),
               ElevatedButton(
                 onPressed: _pickImage,
                 child: Text('Resim Ekle'),
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Ad'),
+                decoration: InputDecoration(labelText: 'Kişi Adı'),
                 onSaved: (value) => _name = value!,
                 validator: (value) =>
-                value!.isEmpty
-                    ? 'Lütfen bir ad girin'
-                    : null,
+                    value!.isEmpty ? 'Lütfen bir ad girin' : null,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Kimlik Numarası'),
+                decoration: InputDecoration(labelText: 'Kişi TC. Kimlik No'),
                 onSaved: (value) => _identityNumber = value!,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -171,22 +156,25 @@ class _EmployeeRegistrationScreenState extends State<EmployeeRegistrationScreen>
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Departman'),
+                decoration: InputDecoration(labelText: 'Kişi Departman'),
                 onSaved: (value) => _department = value!,
-                validator: (value) => value!.isEmpty ? 'Lütfen departman girin' : null,
+                validator: (value) =>
+                    value!.isEmpty ? 'Lütfen departman girin' : null,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Maaş'),
+                decoration: InputDecoration(labelText: 'Kişi Maaş'),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _salary = double.tryParse(value!) ?? 0.0,
-                validator: (value) => value!.isEmpty ? 'Lütfen maaş girin' : null,
+                validator: (value) =>
+                    value!.isEmpty ? 'Lütfen maaş girin' : null,
               ),
+              Text("Çalışma Yılı: "),
               Slider(
                 value: _workingYears.toDouble(),
                 min: 0,
                 max: 30,
                 divisions: 30,
-                label: 'Çalışma Yılı: ${_workingYears.toString()}',
+                label: ' ${_workingYears.toString()}',
                 onChanged: (newValue) {
                   setState(() {
                     _workingYears = newValue.round();
@@ -204,13 +192,15 @@ class _EmployeeRegistrationScreenState extends State<EmployeeRegistrationScreen>
                   },
                   initialCameraPosition: _ilkkonum,
                   mapType: MapType.normal,
-                  markers: _selectedLocation != null ? {
-                    Marker(
-                      markerId: MarkerId('selectedLocation'),
-                      position: _selectedLocation!,
-                      infoWindow: InfoWindow(title: 'Seçilen Konum'),
-                    ),
-                  } : {},
+                  markers: _selectedLocation != null
+                      ? {
+                          Marker(
+                            markerId: MarkerId('selectedLocation'),
+                            position: _selectedLocation!,
+                            infoWindow: InfoWindow(title: 'Seçilen Konum'),
+                          ),
+                        }
+                      : {},
                   onTap: (LatLng tappedLocation) {
                     _selectLocation(tappedLocation); // Seçilen konumu işle
                   },
@@ -242,16 +232,4 @@ class _EmployeeRegistrationScreenState extends State<EmployeeRegistrationScreen>
       ),
     );
   }
-/*
-  Widget _buildEmployeeList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: _employeesIdentityNumbers.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(_employeesIdentityNumbers[index]),
-        );
-      },
-    );
-  }*/
 }

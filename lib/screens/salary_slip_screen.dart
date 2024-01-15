@@ -34,8 +34,10 @@ class _SalarySlipScreenState extends State<SalarySlipScreen> {
       return;
     }
 
-    final List<Map<String, dynamic>> slips = await DatabaseHelper.instance.getFullSalarySlips(identityNumber);
-    String? photoPath = await DatabaseHelper.instance.getEmployeePhotoPathById(identityNumber);
+    final List<Map<String, dynamic>> slips =
+        await DatabaseHelper.instance.getFullSalarySlips(identityNumber);
+    String? photoPath =
+        await DatabaseHelper.instance.getEmployeePhotoPathById(identityNumber);
 
     setState(() {
       _salarySlips = slips;
@@ -44,11 +46,11 @@ class _SalarySlipScreenState extends State<SalarySlipScreen> {
 
     if (_salarySlips.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Kayıtlı maaş bordrosu bulunamadı.')),
+        SnackBar(content: Text('Kişiye kayıtlı Bordro Bulunamadı.')),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Maaş bordrosu sorgulama başarılı.')),
+        SnackBar(content: Text('Bordro Bulundu.')),
       );
     }
   }
@@ -86,9 +88,7 @@ class _SalarySlipScreenState extends State<SalarySlipScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Maaş Bordrosu Ekranı'),
-      ),
+      backgroundColor: Colors.redAccent,
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -96,15 +96,23 @@ class _SalarySlipScreenState extends State<SalarySlipScreen> {
             TextFormField(
               controller: _identityNumberController,
               decoration: InputDecoration(
-                labelText: 'Kimlik Numarası',
+                labelText: 'Kişi T.C',
                 border: OutlineInputBorder(),
+                //set background color
+                filled: true,
+                fillColor: Colors.white,
               ),
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 20),
             TextButton(
               onPressed: _searchSalarySlips,
-              child: Text('Sorgula'),
+              child: Text('MAAŞ BORDROSU'),
+              //set color
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.black,
+              ),
             ),
             SizedBox(height: 20),
             _buildPhotoFrame(),
